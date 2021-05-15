@@ -72,8 +72,7 @@ Class | Method | HTTP request | Description
 Example
 ```golang
 auth := context.WithValue(context.Background(), sw.ContextAPIKey, sw.APIKey{
-	Key: "APIKEY",
-	Prefix: "Bearer", // Omit if not necessary.
+	Key: "Your JSON Web Token goes here"
 })
 r, err := client.Service.Operation(auth, args)
 ```
