@@ -1,0 +1,1045 @@
+openapi: 3.0.1
+info:
+  title: The SMS Works API
+  description: "The SMS Works provides a low-cost, reliable SMS API for developers.\
+    \ Pay only for delivered texts, all failed messages are refunded."
+  version: 1.5.0
+servers:
+- url: https://api.thesmsworks.co.uk/v1
+paths:
+  /message/send:
+    post:
+      tags:
+      - messages
+      description: Sends an SMS message
+      requestBody:
+        description: Message properties
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+        required: true
+      responses:
+        "201":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/SendMessageResponse'
+        "402":
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      security:
+      - JWT: []
+      x-codegen-request-body-name: smsMessage
+  /message/flash:
+    post:
+      tags:
+      - messages
+      description: "Sends an SMS flash message, which appears on the recipients lock\
+        \ screen"
+      operationId: sendFlashMessage
+      requestBody:
+        description: Message properties
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+        required: true
+      responses:
+        "201":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/SendMessageResponse'
+        "402":
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      security:
+      - JWT: []
+      x-codegen-request-body-name: smsMessage
+    x-swagger-router-controller: flash
+  /message/schedule:
+    post:
+      tags:
+      - messages
+      description: Schedules an SMS message to be sent at the date-time you specify
+      operationId: scheduleMessage
+      requestBody:
+        description: Message properties
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+        required: true
+      responses:
+        "201":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ScheduledMessageResponse'
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      security:
+      - JWT: []
+      x-codegen-request-body-name: smsMessage
+    x-swagger-router-controller: smpp-client
+  /messages:
+    post:
+      tags:
+      - messages
+      description: Get messages matching your search criteria
+      operationId: getMessages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Query'
+        required: true
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageResponse'
+                x-content-type: application/json;charset=UTF-8
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      security:
+      - JWT: []
+      x-codegen-request-body-name: query
+    x-swagger-router-controller: message-client
+  /messages/inbox:
+    post:
+      tags:
+      - messages
+      description: Get unread uncoming messages matching your search criteria
+      operationId: getInboxMessages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Query'
+        required: true
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageResponse'
+                x-content-type: application/json;charset=UTF-8
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      security:
+      - JWT: []
+      x-codegen-request-body-name: query
+    x-swagger-router-controller: message-client
+  /messages/failed:
+    post:
+      tags:
+      - messages
+      description: Get failed messages matching your search criteria
+      operationId: getFailedMessages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Query'
+        required: true
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageResponse'
+                x-content-type: application/json;charset=UTF-8
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      security:
+      - JWT: []
+      x-codegen-request-body-name: query
+    x-swagger-router-controller: message-client
+  /messages/{messageid}:
+    get:
+      tags:
+      - messages
+      description: Retrieve a logged message by the message ID
+      operationId: getMessageById
+      parameters:
+      - name: messageid
+        in: path
+        description: The ID of the message you would like returned
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        "404":
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - messages
+      description: Delete the message with the mathcing messageid
+      operationId: deleteMessage
+      parameters:
+      - name: messageid
+        in: path
+        description: The ID of the message you would like returned
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/DeletedMessageResponse'
+        "400":
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+      security:
+      - JWT: []
+    x-swagger-router-controller: message-client
+  /messages/schedule/{messageid}:
+    delete:
+      tags:
+      - messages
+      description: Cancels a scheduled SMS message
+      operationId: cancelScheduledJob
+      parameters:
+      - name: messageid
+        in: path
+        description: The ID of the message you would like returned
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/CancelledMessageResponse'
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      security:
+      - JWT: []
+    x-swagger-router-controller: smpp-client
+  /batch/send:
+    post:
+      tags:
+      - batch messages
+      description: Send a single SMS message to multiple recipients
+      operationId: sendBatch
+      requestBody:
+        description: Message properties
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchMessage'
+        required: true
+      responses:
+        "201":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BatchMessageResponse'
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      security:
+      - JWT: []
+      x-codegen-request-body-name: smsMessage
+    x-swagger-router-controller: smpp-client
+  /batch/{batchid}:
+    get:
+      tags:
+      - batch messages
+      description: Retrieve all messages in a batch with the given batch ID
+      operationId: getBatchById
+      parameters:
+      - name: batchid
+        in: path
+        description: The ID of the batch you would like returned
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageResponse'
+                x-content-type: application/json;charset=UTF-8
+        "404":
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+      security:
+      - JWT: []
+    x-swagger-router-controller: smpp-client
+  /batch/schedule:
+    post:
+      tags:
+      - batch messages
+      description: Schedules a batch of SMS messages to be sent at the date time you
+        specify
+      operationId: scheduleBatch
+      requestBody:
+        description: Message properties
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchMessage'
+        required: true
+      responses:
+        "201":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ScheduledBatchResponse'
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      security:
+      - JWT: []
+      x-codegen-request-body-name: smsMessage
+    x-swagger-router-controller: smpp-client
+  /batches/schedule/{batchid}:
+    delete:
+      tags:
+      - batch messages
+      description: Cancels a scheduled SMS message
+      operationId: cancelScheduledBatchJob
+      parameters:
+      - name: batchid
+        in: path
+        description: The ID of the batch you would like returned
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/CancelledMessageResponse'
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      security:
+      - JWT: []
+    x-swagger-router-controller: smpp-client
+  /credits/balance:
+    get:
+      tags:
+      - credits
+      description: Returns the number of credits currently available on the account
+      operationId: credits
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/CreditsResponse'
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+      security:
+      - JWT: []
+    x-swagger-router-controller: account-client
+  /utils/test:
+    get:
+      tags:
+      - utils
+      description: Returns the customer ID to the caller
+      operationId: test
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/TestResponse'
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+    x-swagger-router-controller: util-client
+  /utils/errors/{errorcode}:
+    get:
+      tags:
+      - utils
+      description: Returns a sample error object for the given error code. Useful
+        for designing code to react to errors when they occur for real.
+      operationId: getError
+      parameters:
+      - name: errorcode
+        in: path
+        description: The code of the error you would like returned
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+    x-swagger-router-controller: util-client
+  /auth/getApiKey:
+    get:
+      tags:
+      - auth
+      description: Utility method. Please generate your API key by following the instructions
+        on your account page at https://thesmsworks.co.uk/user/login
+      operationId: keySecret
+      parameters:
+      - name: customerid
+        in: query
+        description: Utility method. Please generate your API key by following the
+          instructions on your account page at https://thesmsworks.co.uk/user/login
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "201":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/apiKeyResponse'
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+    x-swagger-router-controller: authentication
+  /auth/token:
+    post:
+      tags:
+      - auth
+      description: "Generates a JSON Web Token for including in the Authorization\
+        \ header of all your calls to the API. This only needs to be done once. Generate\
+        \ the customer ID, API Key & Secret required for this call from the API Key\
+        \ tab your account page."
+      operationId: login
+      requestBody:
+        description: API Key & Secret
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        default:
+          description: Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ExtendedErrorModel'
+      x-codegen-request-body-name: credentials
+    x-swagger-router-controller: authentication
+  /swagger:
+    x-swagger-pipe: swagger_raw
+components:
+  schemas:
+    TestResponse:
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+      example:
+        message: message
+    CreditsResponse:
+      required:
+      - credits
+      type: object
+      properties:
+        credits:
+          type: number
+          description: The number of remaining credits on your SMS Works account.
+            Floating point number.
+          example: 180.0
+      example:
+        credits: 180.0
+    Login:
+      type: object
+      properties:
+        customerid:
+          type: string
+          description: "Your customer ID, available from your account area at https://thesmsworks.co.uk/user/login"
+        key:
+          type: string
+          description: "API Key, available from your account area at https://thesmsworks.co.uk/user/login"
+        secret:
+          type: string
+          description: "API Secret, available from your account area at https://thesmsworks.co.uk/user/login"
+      description: authorisation object
+    Message:
+      required:
+      - content
+      - destination
+      - sender
+      type: object
+      properties:
+        sender:
+          type: string
+          description: The sender of the message. Should be no longer than 11 characters
+            for alphanumeric or 15 characters for numeric sender ID's. No spaces or
+            special characters.
+          example: YourCompany
+        destination:
+          type: string
+          description: Telephone number of the recipient
+          example: "447777777777"
+        content:
+          type: string
+          description: "Message to send to the recipient. Content can be up to 1280\
+            \ characters in length. Messages of 160 characters or fewer are charged\
+            \ 1 credit. If your message is longer than 160 characters then it will\
+            \ be broken down in to chunks of 153 characters before being sent to the\
+            \ recipient's handset, and you will be charged 1 credit for each 153 characters.\
+            \ Messages sent to numbers registered outside the UK will be typically\
+            \ charged double credits, but for certain countries may be charged fractions\
+            \ of credits (e.g. 2.5). Please contact us for rates for each country."
+          example: Your super awesome message
+        deliveryreporturl:
+          type: string
+          description: "The url to which we should POST delivery reports to for this\
+            \ message. If none is specified, we'll use the global delivery report\
+            \ URL that you've configured on your account page."
+          example: http://your.domain.com/delivery/report/path
+        schedule:
+          type: string
+          description: Date at which to send the message. This is only used by the
+            message/schedule service and can be left empty for other services.
+          example: Sun Sep 03 2020 15:34:23 GMT+0100 (BST)
+        tag:
+          type: string
+          description: "An identifying label for the message, which you can use to\
+            \ filter and report on messages you've sent later. Ideal for campaigns.\
+            \ A maximum of 280 characters."
+          example: SummerSpecial
+        ttl:
+          type: number
+          description: The optional number of minutes before the message is deleted.
+            Optional. Omit to prevent delivery report deletion. Integer.
+          example: 10.0
+        responseemail:
+          type: array
+          description: An optional list of email addresses to forward responses to
+            this specific message to. An SMS Works Reply Number is required to use
+            this feature.
+          example:
+          - my.email@mycompany.co.uk
+          - my.other.email@mycompany.co.uk
+          items:
+            type: string
+        metadata:
+          $ref: '#/components/schemas/Message_metadata'
+      description: SMS message object
+    MetaData:
+      type: object
+      properties:
+        key:
+          type: string
+          description: key of the key/value pair
+          example: myKey
+        value:
+          type: string
+          description: value of the key/value pair
+          example: myValue
+      description: Key/value pair that will be returned to you in the API call response.
+    BatchMessage:
+      required:
+      - content
+      - destinations
+      - sender
+      type: object
+      properties:
+        sender:
+          type: string
+          description: The sender of the message. Should be no longer than 11 characters
+            for alphanumeric or 15 characters for numeric sender ID's. No spaces or
+            special characters.
+          example: YourCompany
+        destinations:
+          type: array
+          description: Telephone numbers of each of the recipients
+          example:
+          - "447777777777"
+          - "447777777778"
+          - "447777777779"
+          items:
+            type: string
+        content:
+          type: string
+          description: Message to send to the recipient
+          example: My super awesome batch message
+        deliveryreporturl:
+          type: string
+          description: "The url to which we should POST delivery reports to for this\
+            \ message. If none is specified, we'll use the global delivery report\
+            \ URL that you've configured on your account page."
+          example: http://your.domain.com/delivery/report/path
+        schedule:
+          type: string
+          description: Date-time at which to send the batch. This is only used by
+            the batch/schedule service.
+          example: Wed Jul 19 2017 20:26:28 GMT+0100 (BST)
+        tag:
+          type: string
+          description: "An identifying label for the message, which you can use to\
+            \ filter and report on messages you've sent later. Ideal for campaigns.\
+            \ A maximum of 280 characters."
+          example: SummerSpecial
+        ttl:
+          type: number
+          description: The number of minutes before the message is deleted. Optional.
+            Omit to prevent delivery report deletion. Integer.
+          example: 10.0
+      description: SMS Message Batch
+    Query:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "The status of the messages you would like returned (either\
+            \ 'SENT', 'DELIVERED', 'EXPIRED', 'UNDELIVERABLE', 'REJECTED' or 'INCOMING')"
+          example: SENT
+        credits:
+          type: number
+          description: The number of credits used on the message. Floating point number.
+          example: 2.0
+        destination:
+          type: string
+          description: The phone number of the recipient. Start UK numbers with 44
+            and drop the leading 0.
+          example: "447777777777"
+        sender:
+          type: string
+          description: The sender of the message (this can be the configured sender
+            name for an outbound message or the senders phone number for an inbound
+            message).
+          example: YourCompany
+        keyword:
+          type: string
+          description: The keyword used in the inbound message
+          example: SKYWALKER
+        from:
+          type: string
+          description: The date-time from which you would like matching messages
+          example: Wed Jul 12 2017 20:26:28 GMT+0100 (BST)
+        to:
+          type: string
+          description: The date-time to which you would like matching messages
+          example: Wed Jul 19 2017 20:26:28 GMT+0100 (BST)
+        unread:
+          type: boolean
+          description: "In queries for incoming messages ('status' is 'INCOMING'),\
+            \ specify whether you explicitly want unread messages (true) or read messages\
+            \ (false). Omit this parameter in other circumstances."
+        metadata:
+          $ref: '#/components/schemas/Query_metadata'
+      description: search parameters for querying the message database
+    apiKeyResponse:
+      required:
+      - key
+      - secret
+      type: object
+      properties:
+        key:
+          type: string
+          example: 22795661-48a1-442d-92a3-bc2384836fad
+        secret:
+          type: string
+          example: 10045176307448ced2e1b74963d137f2bfaefbdad6fe415df429b64c4d63b856
+      example:
+        secret: 10045176307448ced2e1b74963d137f2bfaefbdad6fe415df429b64c4d63b856
+        key: 22795661-48a1-442d-92a3-bc2384836fad
+    TokenResponse:
+      required:
+      - token
+      type: object
+      properties:
+        token:
+          type: string
+          example: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1MDA0OTU2NjEsImV4cCI6MTUzMjAzMTY2MSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.BR1BIDy0Mw3R4ilfqAojsnh7bp_pgeX2jfjhhZyaexQ
+      example:
+        token: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1MDA0OTU2NjEsImV4cCI6MTUzMjAzMTY2MSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.BR1BIDy0Mw3R4ilfqAojsnh7bp_pgeX2jfjhhZyaexQ
+    SendMessageResponse:
+      required:
+      - credits
+      - creditsUsed
+      - messageid
+      - status
+      type: object
+      properties:
+        messageid:
+          type: string
+          example: "123456789"
+        status:
+          type: string
+          example: SENT
+        credits:
+          type: number
+          description: The number of remaining credits on your SMS Works account.
+            Floating point number.
+          example: 180.0
+        creditsUsed:
+          type: number
+          description: The number of credits used to send the message. Floating point
+            number.
+          example: 2.0
+      example:
+        credits: 180.0
+        messageid: "123456789"
+        status: SENT
+        creditsUsed: 2.0
+    ScheduledMessageResponse:
+      required:
+      - messageid
+      - status
+      type: object
+      properties:
+        messageid:
+          type: string
+          example: "123456789"
+        status:
+          type: string
+          example: SCHEDULED
+      example:
+        messageid: "123456789"
+        status: SCHEDULED
+    ScheduledBatchResponse:
+      required:
+      - batchid
+      - status
+      type: object
+      properties:
+        batchid:
+          type: string
+          example: "3200562"
+        status:
+          type: string
+          example: SCHEDULED
+      example:
+        batchid: "3200562"
+        status: SCHEDULED
+    CancelledMessageResponse:
+      required:
+      - messageid
+      - status
+      type: object
+      properties:
+        messageid:
+          type: string
+          example: "5620320"
+        status:
+          type: string
+          example: CANCELLED
+      example:
+        messageid: "5620320"
+        status: CANCELLED
+    DeletedMessageResponse:
+      required:
+      - messageid
+      - status
+      type: object
+      properties:
+        messageid:
+          type: string
+          example: "5620320"
+        status:
+          type: string
+          example: DELETED
+      example:
+        messageid: "5620320"
+        status: DELETED
+    BatchMessageResponse:
+      required:
+      - batchid
+      - status
+      type: object
+      properties:
+        batchid:
+          type: string
+          example: "2586749"
+        status:
+          type: string
+          example: SCHEDULED
+      example:
+        batchid: "2586749"
+        status: SCHEDULED
+    MessageResponse:
+      required:
+      - content
+      - created
+      - customerid
+      - destination
+      - messageid
+      - modified
+      - schedule
+      - sender
+      - status
+      - tag
+      type: object
+      properties:
+        batchid:
+          type: string
+          example: "2586749"
+        content:
+          type: string
+          example: My super awesome message
+        created:
+          type: string
+          example: Wed Jul 19 2017 20:53:46 GMT+0100 (BST)
+        customerid:
+          type: string
+          example: 0fca8c3c-6cbc-11e7-8154-a6006ad3dba0
+        deliveryreporturl:
+          type: string
+          example: https://your.domain.com/delivery/report/path
+        destination:
+          type: number
+          example: 447777777777
+        failurereason:
+          $ref: '#/components/schemas/MessageResponse_failurereason'
+        id:
+          type: string
+          example: "123456789"
+        identifier:
+          type: string
+          example: "1073741823"
+        keyword:
+          type: string
+          example: CALRISSIAN
+        messageid:
+          type: string
+          example: "123456789"
+        modified:
+          type: string
+          example: Wed Jul 19 2017 20:53:49 GMT+0100 (BST)
+        schedule:
+          type: string
+          example: Wed Jul 19 2017 20:53:45 GMT+0100 (BST)
+        status:
+          type: string
+          example: DELIVERED
+        sender:
+          type: string
+          example: YourCompany
+        tag:
+          type: string
+          example: campaign2
+      example:
+        identifier: "1073741823"
+        created: Wed Jul 19 2017 20:53:46 GMT+0100 (BST)
+        destination: 447777777777
+        messageid: "123456789"
+        batchid: "2586749"
+        deliveryreporturl: https://your.domain.com/delivery/report/path
+        content: My super awesome message
+        schedule: Wed Jul 19 2017 20:53:45 GMT+0100 (BST)
+        sender: YourCompany
+        customerid: 0fca8c3c-6cbc-11e7-8154-a6006ad3dba0
+        modified: Wed Jul 19 2017 20:53:49 GMT+0100 (BST)
+        failurereason:
+          code: 34.0
+          permanent: false
+          details: Handset error
+        id: "123456789"
+        tag: campaign2
+        keyword: CALRISSIAN
+        status: DELIVERED
+    ErrorModel:
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+    ExtendedErrorModel:
+      allOf:
+      - $ref: '#/components/schemas/ErrorModel'
+      - required:
+        - errorCode
+        - status
+        type: object
+        properties:
+          errorCode:
+            type: number
+            description: Numeric code used to identify the error. Integer.
+          status:
+            type: string
+          permanent:
+            type: boolean
+    Message_metadata:
+      type: object
+      properties:
+        schema:
+          $ref: '#/components/schemas/MetaData'
+      example: "[{\"key\":\"myKey1\",\"value\":\"myValue1\"},{\"key\":\"myKey2\",\"\
+        value\":\"myValue2\"}]"
+    Query_metadata:
+      type: object
+      properties:
+        schema:
+          $ref: '#/components/schemas/MetaData'
+      description: An array of objects containing metadata key/value pairs that have
+        been saved on messages.
+      example: "[{\"key\":\"myKey1\",\"value\":\"myValue1\"},{\"key\":\"myKey2\",\"\
+        value\":\"myValue2\"}]"
+    MessageResponse_failurereason:
+      type: object
+      properties:
+        code:
+          type: number
+          description: Numeric code that defines the error. Integer.
+          example: 34.0
+        details:
+          type: string
+          example: Handset error
+        permanent:
+          type: boolean
+          example: false
+      example:
+        code: 34.0
+        permanent: false
+        details: Handset error
+  securitySchemes:
+    JWT:
+      type: apiKey
+      name: Authorization
+      in: header
+x-original-swagger-version: "2.0"
