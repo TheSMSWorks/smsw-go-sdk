@@ -1,4 +1,4 @@
-# Go API client for swagger
+# Go API client for The SMW Works
 
 The SMS Works provides a low-cost, reliable SMS API for developers. Pay only for delivered texts, all failed messages are refunded.
 
