@@ -1,35 +1,73 @@
-# {{classname}}
+# \MessagesAPI
 
 All URIs are relative to *https://api.thesmsworks.co.uk/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CancelScheduledJob**](MessagesApi.md#CancelScheduledJob) | **Delete** /messages/schedule/{messageid} | 
-[**DeleteMessage**](MessagesApi.md#DeleteMessage) | **Delete** /messages/{messageid} | 
-[**GetFailedMessages**](MessagesApi.md#GetFailedMessages) | **Post** /messages/failed | 
-[**GetInboxMessages**](MessagesApi.md#GetInboxMessages) | **Post** /messages/inbox | 
-[**GetMessageById**](MessagesApi.md#GetMessageById) | **Get** /messages/{messageid} | 
-[**GetMessages**](MessagesApi.md#GetMessages) | **Post** /messages | 
-[**MessageSendPost**](MessagesApi.md#MessageSendPost) | **Post** /message/send | 
-[**ScheduleMessage**](MessagesApi.md#ScheduleMessage) | **Post** /message/schedule | 
-[**SendFlashMessage**](MessagesApi.md#SendFlashMessage) | **Post** /message/flash | 
-
-# **CancelScheduledJob**
-> CancelledMessageResponse CancelScheduledJob(ctx, messageid)
+[**MessageSchedulePost**](MessagesAPI.md#MessageSchedulePost) | **Post** /message/schedule | 
+[**MessageSendPost**](MessagesAPI.md#MessageSendPost) | **Post** /message/send | 
+[**MessagesFailedPost**](MessagesAPI.md#MessagesFailedPost) | **Post** /messages/failed | 
+[**MessagesInboxPost**](MessagesAPI.md#MessagesInboxPost) | **Post** /messages/inbox | 
+[**MessagesMessageidDelete**](MessagesAPI.md#MessagesMessageidDelete) | **Delete** /messages/{messageid} | 
+[**MessagesMessageidGet**](MessagesAPI.md#MessagesMessageidGet) | **Get** /messages/{messageid} | 
+[**MessagesPost**](MessagesAPI.md#MessagesPost) | **Post** /messages | 
+[**MessagesScheduleGet**](MessagesAPI.md#MessagesScheduleGet) | **Get** /messages/schedule | 
+[**MessagesScheduleMessageidDelete**](MessagesAPI.md#MessagesScheduleMessageidDelete) | **Delete** /messages/schedule/{messageid} | 
+[**SendFlashMessage**](MessagesAPI.md#SendFlashMessage) | **Post** /message/flash | 
 
 
-Cancels a scheduled SMS message
 
-### Required Parameters
+## MessageSchedulePost
+
+> []ScheduledMessageResponse MessageSchedulePost(ctx).SmsMessage(smsMessage).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+    smsMessage := *openapiclient.NewMessage("YourCompany", "447777777777", "Your super awesome message") // Message | Message properties
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.MessagesAPI.MessageSchedulePost(context.Background()).SmsMessage(smsMessage).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `MessagesAPI.MessageSchedulePost``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `MessageSchedulePost`: []ScheduledMessageResponse
+    fmt.Fprintf(os.Stdout, "Response from `MessagesAPI.MessageSchedulePost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiMessageSchedulePostRequest struct via the builder pattern
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **messageid** | **string**| The ID of the message you would like returned | 
+ **smsMessage** | [**Message**](Message.md) | Message properties | 
 
 ### Return type
 
-[**CancelledMessageResponse**](CancelledMessageResponse.md)
+[**[]ScheduledMessageResponse**](ScheduledMessageResponse.md)
 
 ### Authorization
 
@@ -37,23 +75,263 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json;charset=UTF-8
+- **Content-Type**: application/json
+- **Accept**: application/json;charset=UTF-8
 
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
-# **DeleteMessage**
-> DeletedMessageResponse DeleteMessage(ctx, messageid)
+
+## MessageSendPost
+
+> SendMessageResponse MessageSendPost(ctx).SmsMessage(smsMessage).Execute()
 
 
-Delete the message with the mathcing messageid
 
-### Required Parameters
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+    smsMessage := *openapiclient.NewMessage("YourCompany", "447777777777", "Your super awesome message") // Message | Message properties
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.MessagesAPI.MessageSendPost(context.Background()).SmsMessage(smsMessage).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `MessagesAPI.MessageSendPost``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `MessageSendPost`: SendMessageResponse
+    fmt.Fprintf(os.Stdout, "Response from `MessagesAPI.MessageSendPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiMessageSendPostRequest struct via the builder pattern
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **messageid** | **string**| The ID of the message you would like returned | 
+ **smsMessage** | [**Message**](Message.md) | Message properties | 
+
+### Return type
+
+[**SendMessageResponse**](SendMessageResponse.md)
+
+### Authorization
+
+[JWT](../README.md#JWT)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json;charset=UTF-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## MessagesFailedPost
+
+> []MessageResponse MessagesFailedPost(ctx).Query(query).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+    query := *openapiclient.NewQuery() // Query | 
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.MessagesAPI.MessagesFailedPost(context.Background()).Query(query).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `MessagesAPI.MessagesFailedPost``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `MessagesFailedPost`: []MessageResponse
+    fmt.Fprintf(os.Stdout, "Response from `MessagesAPI.MessagesFailedPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiMessagesFailedPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **query** | [**Query**](Query.md) |  | 
+
+### Return type
+
+[**[]MessageResponse**](MessageResponse.md)
+
+### Authorization
+
+[JWT](../README.md#JWT)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json;charset=UTF-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## MessagesInboxPost
+
+> []MessageResponse MessagesInboxPost(ctx).Query(query).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+    query := *openapiclient.NewQuery() // Query | 
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.MessagesAPI.MessagesInboxPost(context.Background()).Query(query).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `MessagesAPI.MessagesInboxPost``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `MessagesInboxPost`: []MessageResponse
+    fmt.Fprintf(os.Stdout, "Response from `MessagesAPI.MessagesInboxPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiMessagesInboxPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **query** | [**Query**](Query.md) |  | 
+
+### Return type
+
+[**[]MessageResponse**](MessageResponse.md)
+
+### Authorization
+
+[JWT](../README.md#JWT)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json;charset=UTF-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## MessagesMessageidDelete
+
+> DeletedMessageResponse MessagesMessageidDelete(ctx, messageid).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+    messageid := "messageid_example" // string | The ID of the message you would like returned
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.MessagesAPI.MessagesMessageidDelete(context.Background(), messageid).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `MessagesAPI.MessagesMessageidDelete``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `MessagesMessageidDelete`: DeletedMessageResponse
+    fmt.Fprintf(os.Stdout, "Response from `MessagesAPI.MessagesMessageidDelete`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**messageid** | **string** | The ID of the message you would like returned | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiMessagesMessageidDeleteRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
 
 ### Return type
 
@@ -65,79 +343,65 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json;charset=UTF-8
+- **Content-Type**: Not defined
+- **Accept**: application/json;charset=UTF-8
 
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
-# **GetFailedMessages**
-> []MessageResponse GetFailedMessages(ctx, body)
+
+## MessagesMessageidGet
+
+> MessageResponse MessagesMessageidGet(ctx, messageid).Execute()
 
 
-Get failed messages matching your search criteria
 
-### Required Parameters
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+    messageid := "messageid_example" // string | The ID of the message you would like returned
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.MessagesAPI.MessagesMessageidGet(context.Background(), messageid).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `MessagesAPI.MessagesMessageidGet``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `MessagesMessageidGet`: MessageResponse
+    fmt.Fprintf(os.Stdout, "Response from `MessagesAPI.MessagesMessageidGet`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **body** | [**Query**](Query.md)|  | 
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**messageid** | **string** | The ID of the message you would like returned | 
 
-### Return type
+### Other Parameters
 
-[**[]MessageResponse**](MessageResponse.md)
+Other parameters are passed through a pointer to a apiMessagesMessageidGetRequest struct via the builder pattern
 
-### Authorization
-
-[JWT](../README.md#JWT)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json;charset=UTF-8
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **GetInboxMessages**
-> []MessageResponse GetInboxMessages(ctx, body)
-
-
-Get unread uncoming messages matching your search criteria
-
-### Required Parameters
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **body** | [**Query**](Query.md)|  | 
 
-### Return type
-
-[**[]MessageResponse**](MessageResponse.md)
-
-### Authorization
-
-[JWT](../README.md#JWT)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json;charset=UTF-8
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **GetMessageById**
-> MessageResponse GetMessageById(ctx, messageid)
-
-
-Retrieve a logged message by the message ID
-
-### Required Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **messageid** | **string**| The ID of the message you would like returned | 
 
 ### Return type
 
@@ -149,23 +413,61 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json;charset=UTF-8
+- **Content-Type**: Not defined
+- **Accept**: application/json;charset=UTF-8
 
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
-# **GetMessages**
-> []MessageResponse GetMessages(ctx, body)
+
+## MessagesPost
+
+> []MessageResponse MessagesPost(ctx).Query(query).Execute()
 
 
-Get messages matching your search criteria
 
-### Required Parameters
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+    query := *openapiclient.NewQuery() // Query | 
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.MessagesAPI.MessagesPost(context.Background()).Query(query).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `MessagesAPI.MessagesPost``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `MessagesPost`: []MessageResponse
+    fmt.Fprintf(os.Stdout, "Response from `MessagesAPI.MessagesPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiMessagesPostRequest struct via the builder pattern
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **body** | [**Query**](Query.md)|  | 
+ **query** | [**Query**](Query.md) |  | 
 
 ### Return type
 
@@ -177,23 +479,192 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json;charset=UTF-8
+- **Content-Type**: application/json
+- **Accept**: application/json;charset=UTF-8
 
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
-# **MessageSendPost**
-> SendMessageResponse MessageSendPost(ctx, body)
+
+## MessagesScheduleGet
+
+> ScheduledMessagesResponse MessagesScheduleGet(ctx).Execute()
 
 
-Sends an SMS message
 
-### Required Parameters
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.MessagesAPI.MessagesScheduleGet(context.Background()).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `MessagesAPI.MessagesScheduleGet``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `MessagesScheduleGet`: ScheduledMessagesResponse
+    fmt.Fprintf(os.Stdout, "Response from `MessagesAPI.MessagesScheduleGet`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiMessagesScheduleGetRequest struct via the builder pattern
+
+
+### Return type
+
+[**ScheduledMessagesResponse**](ScheduledMessagesResponse.md)
+
+### Authorization
+
+[JWT](../README.md#JWT)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json;charset=UTF-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## MessagesScheduleMessageidDelete
+
+> CancelledMessageResponse MessagesScheduleMessageidDelete(ctx, messageid).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+    messageid := "messageid_example" // string | The ID of the message you would like returned
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.MessagesAPI.MessagesScheduleMessageidDelete(context.Background(), messageid).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `MessagesAPI.MessagesScheduleMessageidDelete``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `MessagesScheduleMessageidDelete`: CancelledMessageResponse
+    fmt.Fprintf(os.Stdout, "Response from `MessagesAPI.MessagesScheduleMessageidDelete`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **body** | [**Message**](Message.md)| Message properties | 
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**messageid** | **string** | The ID of the message you would like returned | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiMessagesScheduleMessageidDeleteRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**CancelledMessageResponse**](CancelledMessageResponse.md)
+
+### Authorization
+
+[JWT](../README.md#JWT)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json;charset=UTF-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## SendFlashMessage
+
+> SendMessageResponse SendFlashMessage(ctx).SmsMessage(smsMessage).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+    smsMessage := *openapiclient.NewMessage("YourCompany", "447777777777", "Your super awesome message") // Message | Message properties
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.MessagesAPI.SendFlashMessage(context.Background()).SmsMessage(smsMessage).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `MessagesAPI.SendFlashMessage``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `SendFlashMessage`: SendMessageResponse
+    fmt.Fprintf(os.Stdout, "Response from `MessagesAPI.SendFlashMessage`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiSendFlashMessageRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **smsMessage** | [**Message**](Message.md) | Message properties | 
 
 ### Return type
 
@@ -205,64 +676,10 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json;charset=UTF-8
+- **Content-Type**: application/json
+- **Accept**: application/json;charset=UTF-8
 
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **ScheduleMessage**
-> ScheduledMessageResponse ScheduleMessage(ctx, body)
-
-
-Schedules an SMS message to be sent at the date-time you specify
-
-### Required Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **body** | [**Message**](Message.md)| Message properties | 
-
-### Return type
-
-[**ScheduledMessageResponse**](ScheduledMessageResponse.md)
-
-### Authorization
-
-[JWT](../README.md#JWT)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json;charset=UTF-8
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **SendFlashMessage**
-> SendMessageResponse SendFlashMessage(ctx, body)
-
-
-Sends an SMS flash message, which appears on the recipients lock screen
-
-### Required Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-  **body** | [**Message**](Message.md)| Message properties | 
-
-### Return type
-
-[**SendMessageResponse**](SendMessageResponse.md)
-
-### Authorization
-
-[JWT](../README.md#JWT)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json;charset=UTF-8
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
